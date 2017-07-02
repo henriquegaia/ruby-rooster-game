@@ -28,12 +28,7 @@ class Game
 	########################################################
 
 	def setPlayers
-		#print "player 1 name: "
-		#p1Name = gets
-
-		#@humanPlayer = Player.new(1,p1Name)
 		@humanPlayer = Player.new(1, 'joe')
-		
 		@digitalPlayer = Player.new(2)
 	end
 
@@ -54,25 +49,49 @@ class Game
 
 	def start
 		puts 'Game started ...'
-		while ( !hasWinner || @board.hasSpotsAvailable )
+
+		while ( @board.hasSpotsAvailable() )
+
 			printBoard()
-			showSpotsAvailable
+
+			if hasWinner()
+				puts 'Player ', @getWinner, ' WINS !!!'
+				pri
+				break
+			end 
+			
+			showSpotsAvailable()
 			@nextMove = getNextMove()
 			if moveIsValid()
 				updateBoard()
 				toggleNextPlayer()
 			end
 		end
+	end
 
+	########################################################
+
+	def end
 		puts 'Game ended ...'
 	end
 
 	########################################################
 
 	def getNextMove
+
+		if nextPlayerIsPc()
+			return @board.getRandomAvailableSpot()
+		end
+
 		puts "player ", @nextPlayer, "move: "
 		print "> "
 		return gets.chomp
+	end
+
+	########################################################
+
+	def nextPlayerIsPc
+		return @nextPlayer == "2"
 	end
 
 	########################################################
@@ -109,6 +128,7 @@ class Game
 
 		if @nextPlayer == "1"
 			@nextPlayer = "2"
+
 		else
 			@nextPlayer = "1"
 		end
@@ -128,4 +148,11 @@ class Game
 			@board.hasHorizontalSequence() ||
 			@board.hasDiagonalSequence()
 	end
+
+	########################################################
+
+	def getWinner
+		return @board.winningSequence
+	end
+
 end

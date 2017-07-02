@@ -21,7 +21,6 @@ class Board
 		@rows = 3
 		@cols = 3
 		@matrix = Matrix.zero(@rows)
-		#@matrix[1,1]="p1"
 	end
 
 	########################################################
@@ -94,24 +93,109 @@ class Board
 	#####################################################
 	
 	def hasVerticalSequence
-		return false
+		matrixTransposed = @matrix.transpose
+		return hasHorizontalSequence(matrixTransposed)
 	end
 
 	#####################################################
 
-	def hasHorizontalSequence
-		return true
-		@matrix.each_with_index do |value, row, column|
+	def hasHorizontalSequence(matrix = @matrix)
+		foundEqual = 0
+		matrix.each_with_index do |value, row, column|
 
-			puts column
+			# increment couter
+			if value != 0 && value == matrix[row, 0]
+				foundEqual += 1
+			end
+
+			# return if all rows have same value
+			if @cols == foundEqual
+				return true
+			end
+
+			# if column = 2, put counter to zero
+			if column == @cols - 1
+				foundEqual = 0
+			end
 			
 		end
+		return false
 	end
 
 	#####################################################
 
 	def hasDiagonalSequence
-		return false
+		
+		return hasStraigthDiagonalSequence() ||
+			hasReverseDiagonalSequence()
+	end
+
+	#####################################################
+
+	def hasStraigthDiagonalSequence
+
+		refValue = @matrix[0,0]
+
+		if refValue == 0
+			return false
+		end
+
+		@rows.times do |n|
+			if @matrix[n, n] != refValue
+				return false
+			end
+		end
+
+		return true
+	end
+
+	#####################################################
+
+	def hasReverseDiagonalSequence
+
+		if @matrix[1,1] == 0
+			return false
+		end
+
+		result =  ( @matrix[0,2] == @matrix[1,1] ) &&
+				( @matrix[1,1] == @matrix[2,0] )
+
+		if !result 
+			return false
+		else
+			return true
+		end	
+
+		<<-doc 
+		BUG: NEVER RETURNING TRUE 
+
+		refValue = @matrix[@rows - 1, 0]
+
+		if refValue == 0
+			return false
+		end
+
+		counter = 0		
+		@rows.times do |n|
+
+			col = @cols - counter
+
+			if @matrix[n, col] != refValue
+				return false
+			end
+
+			counter += 1			
+		end
+
+		return true
+		doc
+	end
+
+	#####################################################
+	
+	def getRandomAvailableSpot
+		spotsAvailable = spotsAvailable()
+		return spotsAvailable[rand(spotsAvailable.size())]
 	end
 
 	#####################################################

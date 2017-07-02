@@ -1,0 +1,16 @@
+===========================================================
+ERRORS - HIGH
+===========================================================
+
+-if has winner, says who is
+
+-sometimes the 1st and 2nd play are for the same player
+
+-if p2 is the one to start, it doesn't generate a random
+move; rather, asks for the next move
+
+===========================================================
+ERRORS - LOW
+===========================================================
+
+-Board::hasReverseDiagonalSequence limited to matrix 2*2
